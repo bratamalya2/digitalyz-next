@@ -57,16 +57,8 @@ export default function Home() {
         <p className="text-center text-gray-600">Upload and edit data from Excel sheets</p>
       </header>
       
-      <div className="flex flex-col md:flex-row gap-4 mb-8">
+      <div className="mb-8">
         <FileUploader onDataLoaded={handleDataLoaded} />
-        <div className="flex items-center justify-center">
-          <button
-            onClick={handleLoadSampleData}
-            className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors"
-          >
-            Load Sample Data
-          </button>
-        </div>
       </div>
       
       {/* Validation Results */}
