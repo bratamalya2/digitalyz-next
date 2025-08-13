@@ -74,7 +74,13 @@ const TaskGrid = ({ data, onDataChange }) => {
             params.newValue.startsWith("[") &&
             params.newValue.endsWith("]")
           ) {
-            params.data.PreferredPhases = JSON.parse(params.newValue);
+            // Strip brackets and parse as comma-separated values
+            const content = params.newValue.slice(1, -1).trim();
+            if (!content) {
+              params.data.PreferredPhases = [];
+              return true;
+            }
+            params.data.PreferredPhases = content.split(',').map(phase => parseInt(phase.trim())).filter(phase => !isNaN(phase));
             return true;
           }
 

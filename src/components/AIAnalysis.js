@@ -122,8 +122,8 @@ const AIAnalysis = ({ data }) => {
 
       {/* Error Display */}
       {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-          <strong>Error:</strong> {error}
+        <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded mb-4">
+          <strong>Note:</strong> {error.includes('API key') ? 'Please configure your OpenAI API key in the .env.local file to enable AI features.' : error}
         </div>
       )}
 

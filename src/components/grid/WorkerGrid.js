@@ -61,7 +61,13 @@ const WorkerGrid = ({ data, onDataChange }) => {
             params.newValue.startsWith("[") &&
             params.newValue.endsWith("]")
           ) {
-            params.data.AvailableSlots = JSON.parse(params.newValue);
+            // Strip brackets and parse as comma-separated values
+            const content = params.newValue.slice(1, -1).trim();
+            if (!content) {
+              params.data.AvailableSlots = [];
+              return true;
+            }
+            params.data.AvailableSlots = content.split(',').map(slot => parseInt(slot.trim())).filter(slot => !isNaN(slot));
             return true;
           }
 

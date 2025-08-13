@@ -107,7 +107,10 @@ const FileUploader = ({ onDataLoaded }) => {
     try {
       // Handle array notation [1,3,5]
       if (slotsStr.startsWith('[') && slotsStr.endsWith(']')) {
-        return JSON.parse(slotsStr);
+        // Strip brackets and parse as comma-separated values
+        const content = slotsStr.slice(1, -1).trim();
+        if (!content) return [];
+        return content.split(',').map(slot => parseInt(slot.trim())).filter(slot => !isNaN(slot));
       }
       
       // Handle comma-separated values
@@ -125,7 +128,10 @@ const FileUploader = ({ onDataLoaded }) => {
     try {
       // Handle array notation [2,4,5]
       if (phasesStr.startsWith('[') && phasesStr.endsWith(']')) {
-        return JSON.parse(phasesStr);
+        // Strip brackets and parse as comma-separated values
+        const content = phasesStr.slice(1, -1).trim();
+        if (!content) return [];
+        return content.split(',').map(phase => parseInt(phase.trim())).filter(phase => !isNaN(phase));
       }
       
       // Handle range notation "1-3"
