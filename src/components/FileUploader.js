@@ -170,7 +170,9 @@ const FileUploader = ({ onDataLoaded }) => {
           {loading ? 'Processing...' : 'Upload Excel File'}
         </button>
         {fileName && <p className="mt-2 text-sm text-gray-600">Selected: {fileName}</p>}
+        }
         {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
+        }
       </div>
     </div>
   );
