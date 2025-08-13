@@ -5,6 +5,7 @@ import FileUploader from '../components/FileUploader';
 import ClientGrid from '../components/grid/ClientGrid';
 import WorkerGrid from '../components/grid/WorkerGrid';
 import TaskGrid from '../components/grid/TaskGrid';
+import AIAnalysis from '../components/AIAnalysis';
 import { validateDataRelationships } from '../lib/validators';
 import { createSampleData } from '../utils/helpers';
 
@@ -103,43 +104,50 @@ export default function Home() {
       )}
       
       {/* Tabs */}
-      <div className="mb-4 border-b border-gray-200">
-        <nav className="-mb-px flex space-x-8">
-          <button
-            onClick={() => setActiveTab('clients')}
-            className={`py-2 px-1 border-b-2 font-medium text-sm ${activeTab === 'clients' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}
-          >
-            Clients
-          </button>
-          <button
-            onClick={() => setActiveTab('workers')}
-            className={`py-2 px-1 border-b-2 font-medium text-sm ${activeTab === 'workers' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}
-          >
-            Workers
-          </button>
-          <button
-            onClick={() => setActiveTab('tasks')}
-            className={`py-2 px-1 border-b-2 font-medium text-sm ${activeTab === 'tasks' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}
-          >
-            Tasks
-          </button>
-        </nav>
-      </div>
+      {(clientData.length > 0 || workerData.length > 0 || taskData.length > 0) && (
+        <>
+          {/* AI Analysis Section */}
+          <AIAnalysis data={{ clientData, workerData, taskData }} />
+          
+          <div className="mb-4 border-b border-gray-200">
+            <nav className="-mb-px flex space-x-8">
+              <button
+                onClick={() => setActiveTab('clients')}
+                className={`py-2 px-1 border-b-2 font-medium text-sm ${activeTab === 'clients' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}
+              >
+                Clients
+              </button>
+              <button
+                onClick={() => setActiveTab('workers')}
+                className={`py-2 px-1 border-b-2 font-medium text-sm ${activeTab === 'workers' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}
+              >
+                Workers
+              </button>
+              <button
+                onClick={() => setActiveTab('tasks')}
+                className={`py-2 px-1 border-b-2 font-medium text-sm ${activeTab === 'tasks' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}
+              >
+                Tasks
+              </button>
+            </nav>
+          </div>
       
-      {/* Grid Components */}
-      <div className="h-[600px]">
-        {activeTab === 'clients' && (
-          <ClientGrid data={clientData} onDataChange={setClientData} />
-        )}
+          {/* Grid Components */}
+          <div className="h-[600px]">
+            {activeTab === 'clients' && (
+              <ClientGrid data={clientData} onDataChange={setClientData} />
+            )}
         
-        {activeTab === 'workers' && (
-          <WorkerGrid data={workerData} onDataChange={setWorkerData} />
-        )}
+            {activeTab === 'workers' && (
+              <WorkerGrid data={workerData} onDataChange={setWorkerData} />
+            )}
         
-        {activeTab === 'tasks' && (
-          <TaskGrid data={taskData} onDataChange={setTaskData} />
-        )}
-      </div>
+            {activeTab === 'tasks' && (
+              <TaskGrid data={taskData} onDataChange={setTaskData} />
+            )}
+          </div>
+        </>
+      )}
       
       <footer className="mt-12 text-center text-gray-500 text-sm">
         <p>Excel Data Viewer - Built with Next.js and AG-Grid</p>
