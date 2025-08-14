@@ -1,5 +1,6 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,6 +24,25 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {children}
+        <script
+          src="https://cdn.jsdelivr.net/npm/react/umd/react.production.min.js"
+          crossorigin
+          async
+        ></script>
+
+        <script
+          src="https://cdn.jsdelivr.net/npm/react-dom/umd/react-dom.production.min.js"
+          crossorigin
+          async
+        ></script>
+
+        <script
+          src="https://cdn.jsdelivr.net/npm/react-bootstrap@next/dist/react-bootstrap.min.js"
+          crossorigin
+          async
+        ></script>
+
+        <script>var Alert = ReactBootstrap.Alert;</script>
       </body>
     </html>
   );

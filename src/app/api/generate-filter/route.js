@@ -7,17 +7,18 @@ const openai = new OpenAI({
 });
 
 export async function POST(req) {
-  const { columns, filterPrompt } = await req.json();
+  const { columns, filterPrompt,dataTypes } = await req.json();
 
   if (!columns || !Array.isArray(columns) || !filterPrompt) {
-    return new Response(JSON.stringify({ error: "Invalid input" }), {
+    return new Response(JSON.stringify({ success: false, error: "Invalid input" }), {
       status: 400,
     });
   }
 
   const prompt = `
 You are a code generator.  
-Given these column names: ${JSON.stringify(columns)}  
+Given these column names: ${JSON.stringify(columns)}
+The data structure of the respective columns: ${JSON.stringify(dataTypes)}
 Generate a JavaScript filter function that accepts a row object and returns true if the row matches the condition described below.  
 
 Condition (in plain English): "${filterPrompt}"
@@ -28,8 +29,7 @@ Rules:
 - Only reference the provided column names exactly as they appear.
 - Do not add comments or explanations.
 
-Example output:
-(row) => row.Status === "Active" && row.Amount > 5000
+Example output: row.Status === "Active" && row.Amount > 5000
 `;
 
   try {
@@ -40,9 +40,9 @@ Example output:
 
     const filterCode = completion.output[0].content[0].text.trim();
 
-    return new Response(JSON.stringify({ filterCode }), { status: 200 });
+    return new Response(JSON.stringify({ success: true, filterCode }), { status: 200 });
   } catch (err) {
-    return new Response(JSON.stringify({ error: err.message }), {
+    return new Response(JSON.stringify({ success: false, error: err.message }), {
       status: 500,
     });
   }
