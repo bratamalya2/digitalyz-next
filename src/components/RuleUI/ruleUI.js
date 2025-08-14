@@ -1,7 +1,8 @@
-import { useState, useEffect, use } from "react";
-
+import { useState, useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
+
+import downloadJSON from "@/lib/downloadJSON";
 
 const clientHeaders = [
   "ClientID",
@@ -67,11 +68,12 @@ export default function RuleUI({
   setExistingRules,
   clientData,
   workerData,
-  taskData
+  taskData,
 }) {
   const [ruleName, setRuleName] = useState("");
   const [ruleDescription, setRuleDescription] = useState("");
   const [ruleCode, setRuleCode] = useState("");
+  const [rulePriority, setRulePriority] = useState(1);
 
   async function generateAndApplyRule() {
     try {
@@ -79,8 +81,8 @@ export default function RuleUI({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          ruleName: "Active Clients Rule",
-          ruleDescription: "Keep only clients whose Status is Active",
+          ruleName,
+          ruleDescription,
           clientData,
           workerData,
           taskData,
@@ -95,8 +97,7 @@ export default function RuleUI({
 
       const data = await res.json();
 
-      if (data.success)
-        return new Function("clientData", "workerData", "taskData", data.ruleCode);
+      if (data.success) return data.ruleCode;
       else return null;
     } catch (err) {
       console.log(err);
@@ -121,15 +122,22 @@ export default function RuleUI({
       if (ruleCode.length > 0) {
         setExistingRules({
           ...existingRules,
-          [ruleName]: { code: ruleCode, description: ruleDescription },
+          [ruleName]: {
+            code: ruleCode,
+            description: ruleDescription,
+            rulePriority,
+          },
         });
         return;
       }
       const newRuleCode = await generateAndApplyRule();
-      console.log("New rule code: ", newRuleCode);
       setExistingRules({
         ...existingRules,
-        [ruleName]: { code: newRuleCode, description: ruleDescription },
+        [ruleName]: {
+          code: newRuleCode,
+          description: ruleDescription,
+          rulePriority,
+        },
       });
     } catch (err) {
       console.log(err);
@@ -143,9 +151,15 @@ export default function RuleUI({
   return (
     <>
       <div className="w-[80%] mx-auto h-[200px] flex flex-col bg-green-100 items-center justify-center gap-y-4">
+        <h2 className="text-xl font-semibold mb-2">Rules</h2>
         {Object.keys(existingRules).length === 0 && <p>No rules defined</p>}
         {Object.keys(existingRules).length > 0 && (
-          <button className="bg-blue-500 text-white p-2 rounded-md">
+          <button
+            className="bg-blue-500 text-white p-2 rounded-md"
+            onClick={() => {
+              downloadJSON(existingRules);
+            }}
+          >
             Download Rules Document
           </button>
         )}
@@ -174,7 +188,7 @@ export default function RuleUI({
           <div className="w-full mt-3 flex flex-row items-center gap-x-4">
             <label>Rule Description:</label>
             <textarea
-              placeholder="Rule Description (Optional)"
+              placeholder="Rule Description"
               value={ruleDescription}
               onChange={(e) => setRuleDescription(e.target.value)}
               className="border border-black rounded-md px-3 grow min-h-[100px]"
@@ -187,6 +201,16 @@ export default function RuleUI({
               placeholder="Rule Code"
               value={ruleCode}
               onChange={(e) => setRuleCode(e.target.value)}
+              className="border border-black rounded-md px-3 grow"
+            />
+          </div>
+          <div className="w-full mt-3 flex flex-row items-center gap-x-12">
+            <label>Rule Priority:</label>
+            <input
+              type="number"
+              placeholder="Rule Priority"
+              value={rulePriority}
+              onChange={(e) => setRulePriority(e.target.value)}
               className="border border-black rounded-md px-3 grow"
             />
           </div>

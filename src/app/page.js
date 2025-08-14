@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+
 import FileUploader from "../components/FileUploader";
 import ClientGrid from "../components/grid/ClientGrid";
 import WorkerGrid from "../components/grid/WorkerGrid";
@@ -8,6 +9,8 @@ import TaskGrid from "../components/grid/TaskGrid";
 import { validateDataRelationships } from "../lib/validators";
 import FilterInput from "@/components/filterInput/filterInput";
 import RuleUI from "@/components/RuleUI/ruleUI";
+
+import downloadCSV from "@/lib/downloadCSV";
 
 export default function Home() {
   // State for data
@@ -58,18 +61,6 @@ export default function Home() {
       setValidationResults(validationResult);
     }
   }, [clientData, workerData, taskData]);
-
-  // useEffect(() => {
-  //   console.log("Client data: ", clientData);
-  // }, [clientData]);
-
-  // useEffect(() => {
-  //   console.log("Worker data: ", workerData);
-  // }, [workerData]);
-
-  // useEffect(() => {
-  //   console.log("Task data: ", taskData);
-  // }, [taskData]);
 
   return (
     <div className="min-h-screen p-4 sm:p-6 md:p-8 bg-gray-50">
@@ -210,6 +201,29 @@ export default function Home() {
             )}
           </div>
         </>
+      )}
+
+      {validationResults?.valid && (
+        <div className="mt-4 w-full min-h-[150px] flex flex-row items-center justify-around">
+          <button
+            onClick={() => downloadCSV(clientData, "clients")}
+            className="bg-blue-500 text-white p-2 rounded-md"
+          >
+            Download Clients CSV
+          </button>
+          <button
+            onClick={() => downloadCSV(workerData, "workers")}
+            className="bg-blue-500 text-white p-2 rounded-md"
+          >
+            Download Workers CSV
+          </button>
+          <button
+            onClick={() => downloadCSV(taskData, "tasks")}
+            className="bg-blue-500 text-white p-2 rounded-md"
+          >
+            Download Tasks CSV
+          </button>
+        </div>
       )}
 
       <footer className="mt-12 text-center text-gray-500 text-sm">

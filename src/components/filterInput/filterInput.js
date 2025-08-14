@@ -142,6 +142,7 @@ export default function FilterInput({
 
   return (
     <div className="mb-8 w-[44%] text-black-500 px-5 py-7 bg-green-100 rounded-md flex flex-col gap-y-4">
+      <h2 className="text-xl font-semibold mb-2">Filter Data</h2>
       <input
         type="text"
         placeholder="Filter..."
